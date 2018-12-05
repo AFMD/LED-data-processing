@@ -14,8 +14,15 @@ cwd = os.getcwd()
 files = [f for f in os.listdir(cwd) if (f.endswith('.ilv'))] 
 #sort files alphabetically
 files.sort()
-#for x in files:
-#    identifier = x.split('_')[-3]
+
+for x in files:
+    identifier = x.split('_')[-3]
+    print(identifier)
+
+new_files = [x for x in files if (x.split('_')[-3] is '0.6-1')]
+
+
+
 ## iterate through the list of files, opening each, picking out the necessary data
 #    print(identifier)
     
@@ -40,3 +47,4 @@ for f in files:
     
 plt.legend()
     
+
