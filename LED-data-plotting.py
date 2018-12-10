@@ -77,24 +77,16 @@ for identifier in unique_identifiers:
 #loop for plotting a number of subfigures
 
 
-fig, ax = plt.subplots(8, 1)
-row_number = 0
+fig, ax = plt.subplots(len(unique_identifiers), 1, figsize=(15,30))
 plot_number = 0
-column_number = 0
-for subax in ax:
-    for identifier in unique_identifiers: 
-        if plot_number == len(data[identifier]) :
-            plot_number = 0
-            break
-        else:
-            if plot_number == len(data[identifier]) :
-                break
-            while plot_number < len(data[identifier]):
-                subax.plot(data[identifier][plot_number]['V'],data[identifier][plot_number]['I_corrected'])
-                plot_number += 1
-
-subax.show()
-       
+for identifier, subax in zip(unique_identifiers, ax):
+    plot_number = 0
+    while plot_number < len(data[identifier]):
+        label = plot_number
+        subax.plot(data[identifier][plot_number]['V'],data[identifier][plot_number]['EQE_corrected'], label = f'{label}')
+        plot_number += 1
+    subax.legend()
+   
             
 #    plt.title(f'{identifier}')         
 #    plt.legend()
