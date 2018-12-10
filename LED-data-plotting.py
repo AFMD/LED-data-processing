@@ -73,67 +73,58 @@ for identifier in unique_identifiers:
             identifier_data.append(this_data)
     #now we are adding all of the data which we appended into the list idenifier_data and adding it to the dictionary data 
     data[identifier] = identifier_data
-    
-#loop for plotting a number of subfigures
 
-
-fig, ax = plt.subplots(len(unique_identifiers), 1, figsize=(15,30))
+#plotting all EQE vs V curves for different variables in subfigures on a larger figure
+fig, ax = plt.subplots(len(unique_identifiers), 1, figsize=(10,30))
 plot_number = 0
 for identifier, subax in zip(unique_identifiers, ax):
     plot_number = 0
     while plot_number < len(data[identifier]):
-        label = plot_number
+        label = plot_number +1
         subax.plot(data[identifier][plot_number]['V'],data[identifier][plot_number]['EQE_corrected'], label = f'{label}')
-        plot_number += 1
+        plot_number += 1    
     subax.legend()
-   
-            
-#    plt.title(f'{identifier}')         
-#    plt.legend()
-#    plt.show()
-#plt.plot(data[identifier][len(data[identifier])-1]['V'],data[identifier][len(data[identifier])-1]['I_corrected']) 
-# here is how you read voltage fromone of the files    
-#some_voltage = data['0.6-1'][1]['V']
-#print(some_voltage)
-
-sys.exit(-1)
-fig, ax = plt.subplots(3, 2)
-i =1
-for subax in ax:
+    subax.set_title(f'{identifier}')
     
-    for subsubax in subax:
-        subsubax.plot(i*x, i*y)
-        i+=2
-# some example:
-# 
+fig.tight_layout()
+#plotting all I vs V curves for different variables in subfigures on a larger figure
+fig, ax = plt.subplots(len(unique_identifiers), 1, figsize=(10,30))
+plot_number = 0
+for identifier, subax in zip(unique_identifiers, ax):
+    plot_number = 0
+    while plot_number < len(data[identifier]):
+        label = plot_number +1
+        subax.semilogy(data[identifier][plot_number]['V'],data[identifier][plot_number]['I_corrected'], label = f'{label}')
+        plot_number += 1    
+    subax.legend()
+    subax.set_title(f'{identifier}')
+fig.tight_layout()
+#plotting all EQE vs I curves for different variables in subfigures on a larger figure
+fig, ax = plt.subplots(len(unique_identifiers), 1, figsize=(10,30))
+plot_number = 0
+for identifier, subax in zip(unique_identifiers, ax):
+    plot_number = 0
+    while plot_number < len(data[identifier]):
+        label = plot_number +1
+        subax.semilogx(data[identifier][plot_number]['I_corrected'],data[identifier][plot_number]['EQE_corrected'], label = f'{label}')
+        plot_number += 1    
+    subax.legend()
+    subax.set_title(f'{identifier}')
+fig.tight_layout()
 
+#max_EQE boxplot
+#generating a dictionary of the max data
+max_EQE_data = {}
+for identifier in unique_identifiers:
+    data_point = 0
+    max_EQE = []
+    while data_point < len(data[identifier]):
+        this_max = max(data[identifier][data_point]['EQE_corrected'])
+        max_EQE.append(this_max)
+        data_point += 1 
+    max_EQE_data[identifier] = max_EQE
 
-##new_files = [x for x in files if (x.split('_')[-3] is '0.6-1')]
-#
-#
-#
-### iterate through the list of files, opening each, picking out the necessary data
-##    print(identifier)
-#    
-#
-#for f in files:
-#    data = np.genfromtxt(f, delimiter='\t', skip_header=1)
-##    badvalues = np.where(data > 1e30)
-##    new_data = np.delete(data, (badvalues[0]), axis=0)
-#    if data.size < 24:
-#        continue
-#    I = -data[:, 1]
-#    I_corrected = ma.masked_less(I,-1000)
-#    V = -data[:, 0] 
-#    phi_e = data[:, 2]
-#    I_e_omega = data[:, 3]
-#    L_e_omega = data[:, 4]
-#    EQE = data[:, 8]
-#    EQE_corrected = ma.masked_greater(EQE,2)
-#    splitlabel = f.split('_')
-#    label = '_'.join(splitlabel[-4:-1])
-#    plt.plot(V,EQE_corrected, label = f'{label}') 
-#  
-#plt.legend()
-#    
-
+identifier_labels, the_data = max_EQE_data.keys(), max_EQE_data.values()
+fig, ax = plt.subplots(figsize=(10,10))
+ax.boxplot(the_data, labels = identifier_labels)
+#ax.set_xticks(range(1, len(identifier_labels) + 1), identifier_labels)
