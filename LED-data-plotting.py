@@ -73,27 +73,45 @@ for identifier in unique_identifiers:
             identifier_data.append(this_data)
     #now we are adding all of the data which we appended into the list idenifier_data and adding it to the dictionary data 
     data[identifier] = identifier_data
+    
+#loop for plotting a number of subfigures
 
-    plt.figure()     
-    plot_number = 0
-    #plt.subplot(7, 1, 1)
-    if plot_number == len(data[identifier]) :
-        break
-    else:
-        while plot_number < len(data[identifier]):
-            label = plot_number
-            plt.plot(data[identifier][plot_number]['V'],data[identifier][plot_number]['I_corrected'],label = f'{label}')
-            plot_number += 1  
+
+fig, ax = plt.subplots(8, 1)
+row_number = 0
+plot_number = 0
+column_number = 0
+for subax in ax:
+    for identifier in unique_identifiers: 
+        if plot_number == len(data[identifier]) :
+            plot_number = 0
+            break
+        else:
+            if plot_number == len(data[identifier]) :
+                break
+            while plot_number < len(data[identifier]):
+                subax.plot(data[identifier][plot_number]['V'],data[identifier][plot_number]['I_corrected'])
+                plot_number += 1
+
+subax.show()
+       
             
-    plt.title(f'{identifier}')         
-    plt.legend()
+#    plt.title(f'{identifier}')         
+#    plt.legend()
+#    plt.show()
 #plt.plot(data[identifier][len(data[identifier])-1]['V'],data[identifier][len(data[identifier])-1]['I_corrected']) 
 # here is how you read voltage fromone of the files    
 #some_voltage = data['0.6-1'][1]['V']
 #print(some_voltage)
 
 sys.exit(-1)
-
+fig, ax = plt.subplots(3, 2)
+i =1
+for subax in ax:
+    
+    for subsubax in subax:
+        subsubax.plot(i*x, i*y)
+        i+=2
 # some example:
 # 
 
